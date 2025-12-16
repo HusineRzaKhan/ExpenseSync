@@ -1,0 +1,8 @@
+{
+  "expo": {
+    "name": "ExpenseSync",
+    "slug": "expensesync",
+    "version": "1.0.0",
+    "platforms": ["ios","android","web"]
+  }
+}
