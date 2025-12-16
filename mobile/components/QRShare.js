@@ -1,17 +1,11 @@
 import React from 'react';
-import { View, Button } from 'react-native';
+import { View, Button, Share } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import * as Sharing from 'expo-sharing';
-import { captureRef } from 'react-native-view-shot';
-import { useRef } from 'react';
 
 export default function QRShare({ url }) {
-  const qrRef = useRef();
-
-  const share = async () => {
+  const onShare = async () => {
     try {
-      const uri = await captureRef(qrRef, { format: 'png', quality: 0.9 });
-      await Sharing.shareAsync(uri);
+      await Share.share({ message: `Install ExpenseSync: ${url}` });
     } catch (err) {
       console.warn(err);
     }
@@ -19,10 +13,10 @@ export default function QRShare({ url }) {
 
   return (
     <View>
-      <View ref={qrRef} collapsable={false} style={{ alignItems: 'center', padding: 8 }}>
+      <View style={{ alignItems: 'center', padding: 8 }}>
         <QRCode value={url} size={160} />
       </View>
-      <Button title="Share App (QR)" onPress={share} />
+      <Button title="Share App (QR)" onPress={onShare} />
     </View>
   );
 }
