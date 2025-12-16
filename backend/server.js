@@ -18,6 +18,16 @@ app.use('/api/notifications', notificationRoutes);
 const PORT = process.env.PORT || 5000;
 const MONGO = process.env.MONGO_URI || 'mongodb://localhost:27017/expensesync';
 
+function maskMongoUri(uri) {
+  try {
+    return uri.replace(/(mongodb(?:\+srv)?:\/\/)(.*?):(.*?)@/, '$1$2:*****@');
+  } catch (e) {
+    return uri;
+  }
+}
+
+console.log('Connecting to MongoDB:', maskMongoUri(MONGO));
+
 mongoose.connect(MONGO).then(() => {
   console.log('Connected to MongoDB');
   app.listen(PORT, () => console.log(`Server listening on ${PORT}`));

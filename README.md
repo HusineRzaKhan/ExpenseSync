@@ -16,7 +16,6 @@ Quick start
 cd backend
 npm install
 copy .env.example .env
-# edit .env to set MONGO_URI and JWT_SECRET
 npm run dev
 ```
 
