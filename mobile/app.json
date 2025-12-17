@@ -10,6 +10,11 @@
     ],
     "android": {
       "package": "com.anonymous.expensesync"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cb5ecda0-1cbc-490d-ba66-3938ad2e3a32"
+      }
     }
   }
 }
