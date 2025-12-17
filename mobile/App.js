@@ -6,6 +6,7 @@ import { View, TouchableOpacity, Image, Modal } from 'react-native';
 import { ThemeProvider, ThemeContext } from './theme';
 import SideMenu from './components/SideMenu';
 import AppBar from './components/AppBar';
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LoginScreen from './screens/LoginScreen';
@@ -25,7 +26,20 @@ function MainTabs({ navigation }) {
   const { toggleTheme } = React.useContext(ThemeContext);
   return (
     <>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          header: () => <AppBar onAvatarPress={() => setMenuVisible(true)} />,
+          tabBarIcon: ({ color, size }) => {
+            let name = 'home';
+            if (route.name === 'Home') name = 'ios-home';
+            if (route.name === 'Calendar') name = 'ios-calendar';
+            if (route.name === 'Categories') name = 'ios-list';
+            if (route.name === 'Budget') name = 'ios-stats-chart';
+            if (route.name === 'Notifications') name = 'ios-notifications';
+            return <Ionicons name={name} size={size} color={color} />;
+          },
+        })}
+      >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Calendar" component={CalendarScreen} />
         <Tab.Screen name="Categories" component={CategoriesScreen} />

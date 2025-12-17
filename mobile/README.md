@@ -21,6 +21,19 @@ Additionally, to support PDF download & sharing, install:
 
 ```powershell
 npx expo install expo-file-system expo-sharing
+
+Also install the native picker and icon helpers:
+
+```powershell
+npx expo install @react-native-picker/picker
+npm install react-native-vector-icons
+```
+
+Icons
+
+- Put app icons and other images under `mobile/assets/icons/` (create the folder).
+- Reference them in code with `require('../assets/icons/my-icon.png')` or use vector icons from `react-native-vector-icons`.
+
 ```
 ```
 

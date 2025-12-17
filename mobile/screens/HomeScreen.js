@@ -11,6 +11,7 @@ import { ThemeContext } from '../theme';
 export default function HomeScreen({ navigation }) {
   const [records, setRecords] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [editing, setEditing] = useState(null);
   const [detail, setDetail] = useState(null);
   const { theme } = useContext(ThemeContext);
 
@@ -36,21 +37,16 @@ export default function HomeScreen({ navigation }) {
     setModalVisible(false);
   };
 
-  const onEdit = async (item) => {
-    // open modal with item details for edit - simple inline prompt for demo
-    const newNotes = prompt('Edit description', item.notes || '');
-    if (newNotes == null) return;
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (token) {
-        const res = await axios.put(`${Config.API_URL}/transactions/${item._id}`, { notes: newNotes }, { headers: { Authorization: `Bearer ${token}` } });
-        setRecords(r => r.map(x => (x._id === item._id ? res.data : x)));
-        return;
-      }
-    } catch (err) {
-      console.warn(err.message);
-    }
-    setRecords(r => r.map(x => (x._id === item._id ? { ...x, notes: newNotes } : x)));
+  const onUpdate = (rec) => {
+    setRecords(r => r.map(x => (x._id === rec._id ? rec : x)));
+    setEditing(null);
+    setModalVisible(false);
+  };
+
+  const onEdit = (item) => {
+    // open modal in edit mode
+    setEditing(item);
+    setModalVisible(true);
   };
 
   const onDelete = async (item) => {
