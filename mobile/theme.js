@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ThemeContext = createContext({
   theme: 'light',
@@ -7,7 +8,21 @@ export const ThemeContext = createContext({
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
-  const toggleTheme = () => setTheme(t => (t === 'light' ? 'dark' : 'light'));
+  useEffect(() => {
+    (async () => {
+      try {
+        const v = await AsyncStorage.getItem('theme');
+        if (v) setTheme(v);
+      } catch (e) {}
+    })();
+  }, []);
+  const toggleTheme = async () => {
+    setTheme(t => {
+      const next = t === 'light' ? 'dark' : 'light';
+      AsyncStorage.setItem('theme', next).catch(() => {});
+      return next;
+    });
+  };
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}

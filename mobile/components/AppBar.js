@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Platform, StatusBar } from 'react-native';
 import { ThemeContext } from '../theme';
 
 export default function AppBar({ onAvatarPress }) {
   const { theme } = useContext(ThemeContext);
   return (
-    <SafeAreaView style={[styles.safe, theme === 'dark' && { backgroundColor: '#111' }]}>
+    <View style={[styles.safe, theme === 'dark' && { backgroundColor: '#111' }, Platform.OS === 'android' && { paddingTop: StatusBar.currentHeight }]}>
       <View style={[styles.bar, theme === 'dark' && { backgroundColor: '#333' }]}>
         <Text style={styles.title}>Expense Sync</Text>
         <TouchableOpacity onPress={onAvatarPress}>
           <Image source={{ uri: 'https://i.pravatar.cc/100' }} style={styles.avatar} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

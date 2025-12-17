@@ -24,7 +24,7 @@ export default function ProfileScreen({ onClose }) {
     try {
       // validations
       if (!name) return Alert.alert('Name required');
-      if (/^\d+$/.test(name.trim())) return Alert.alert('Name cannot be a number');
+      if (/\d/.test(name)) return Alert.alert('Name cannot contain numbers');
       const emailRe = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\\.,;:\s@\"]+\.)+[^<>()[\]\\.,;:\s@\"]{2,})$/i;
       if (!emailRe.test(String(email).toLowerCase())) return Alert.alert('Invalid email');
       if (password) {
@@ -65,8 +65,6 @@ export default function ProfileScreen({ onClose }) {
       <TextInput value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
 
       <View style={{ marginTop: 12 }}>
-        <Button title="Toggle theme" onPress={toggleTheme} />
-        <View style={{ height: 8 }} />
         <Button title="Save" onPress={save} />
         <View style={{ height: 8 }} />
         <Button title="Close" onPress={onClose} color="#888" />

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, TouchableOpacity, Image, Modal } from 'react-native';
+import { View } from 'react-native';
 import { ThemeProvider, ThemeContext } from './theme';
 import SideMenu from './components/SideMenu';
 import AppBar from './components/AppBar';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LoginScreen from './screens/LoginScreen';
@@ -23,7 +23,7 @@ const Tab = createBottomTabNavigator();
 
 function MainTabs({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
-  const { toggleTheme } = React.useContext(ThemeContext);
+  const { toggleTheme, theme } = React.useContext(ThemeContext);
   return (
     <>
       <Tab.Navigator
@@ -31,13 +31,14 @@ function MainTabs({ navigation }) {
           header: () => <AppBar onAvatarPress={() => setMenuVisible(true)} />,
           tabBarIcon: ({ color, size }) => {
             let name = 'home';
-            if (route.name === 'Home') name = 'ios-home';
-            if (route.name === 'Calendar') name = 'ios-calendar';
-            if (route.name === 'Categories') name = 'ios-list';
-            if (route.name === 'Budget') name = 'ios-stats-chart';
-            if (route.name === 'Notifications') name = 'ios-notifications';
-            return <Ionicons name={name} size={size} color={color} />;
+            if (route.name === 'Home') name = 'home';
+            if (route.name === 'Calendar') name = 'calendar-today';
+            if (route.name === 'Categories') name = 'category';
+            if (route.name === 'Budget') name = 'bar-chart';
+            if (route.name === 'Notifications') name = 'notifications';
+            return <MaterialIcons name={name} size={size} color={color} />;
           },
+          tabBarStyle: { backgroundColor: theme === 'dark' ? '#222' : '#fff' },
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
@@ -61,14 +62,21 @@ function MainTabs({ navigation }) {
 export default function App() {
   return (
     <ThemeProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="Main" component={MainTabs} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <View style={{ flex: 1, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
+            <NavigationContainer>
+              <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Signup" component={SignupScreen} />
+                <Stack.Screen name="Main" component={MainTabs} />
+                <Stack.Screen name="Profile" component={ProfileScreen} />
+                <Stack.Screen name="CategoryList" component={require('./screens/CategoryListScreen').default} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </View>
+        )}
+      </ThemeContext.Consumer>
     </ThemeProvider>
   );
 }

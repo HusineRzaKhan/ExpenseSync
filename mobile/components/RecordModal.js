@@ -72,7 +72,18 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
         <Text style={styles.title}>New Record</Text>
         <TextInput placeholder="Name (optional)" value={name} onChangeText={setName} style={styles.input} />
         <TextInput placeholder="Description" value={desc} onChangeText={setDesc} style={styles.input} />
-        <TextInput placeholder="Amount" value={amount} onChangeText={t => setAmount(t.replace(/[^0-9.]/g, ''))} keyboardType="numeric" style={styles.input} />
+          <TextInput placeholder="Amount" value={amount} onChangeText={t => setAmount(t.replace(/[^0-9.]/g, ''))} keyboardType="numeric" style={styles.input} />
+          <Text style={{ marginTop: 6 }}>Currency</Text>
+          <Picker selectedValue={currency} onValueChange={setCurrency} style={{ marginBottom: 8 }}>
+            <Picker.Item label="PKR" value="PKR" />
+            <Picker.Item label="USD" value="USD" />
+            <Picker.Item label="GBP" value="GBP" />
+          </Picker>
+          <Text style={{ marginTop: 6 }}>Payment method</Text>
+          <Picker selectedValue={method} onValueChange={setMethod} style={{ marginBottom: 8 }}>
+            <Picker.Item label="Cash" value="cash" />
+            <Picker.Item label="Card/Online" value="online" />
+          </Picker>
           <Text style={{ marginTop: 6 }}>Category</Text>
           <Picker selectedValue={category} onValueChange={setCategory} style={{ marginBottom: 8 }}>
             <Picker.Item label="Food" value="Food" />
@@ -85,6 +96,8 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
             <Picker.Item label="Insurance" value="Insurance" />
             <Picker.Item label="Other" value="Other" />
           </Picker>
+        <Text style={{ marginTop: 6 }}>Date (ISO)</Text>
+        <TextInput value={date instanceof Date ? date.toISOString() : String(date)} onChangeText={t => setDate(new Date(t))} style={styles.input} />
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Button title="Pick Image" onPress={pickImage} />
         </View>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 
 export default function SideMenu({ onClose, onProfile, onToggleTheme, onLogout }) {
   return (
@@ -21,7 +22,8 @@ export default function SideMenu({ onClose, onProfile, onToggleTheme, onLogout }
         <View style={styles.separator} />
         <View style={styles.qrBlock}>
           <Text style={{ fontWeight: '700', marginBottom: 8 }}>Get the app</Text>
-          <Text style={{ color: '#666' }}>Scan to download the app (placeholder)</Text>
+          <Text style={{ color: '#666', marginBottom: 8 }}>Scan to download</Text>
+          <QRCode value={'https://example.com/expenssync'} size={120} />
         </View>
       </View>
     </Modal>
