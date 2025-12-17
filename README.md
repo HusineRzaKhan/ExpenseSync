@@ -1,8 +1,3 @@
-Sure — here’s a **complete, clean, GitHub-ready `README.md`** you can paste directly into your repo.
-It’s written for **clarity, beginners, and reviewers**, and fits your **ExpenseSync** app + backend setup.
-
----
-
 # ExpenseSync 📊💸
 
 **ExpenseSync** is a full-stack expense tracking mobile application built with **React Native (Expo)** and a **Node.js + MongoDB backend**.
