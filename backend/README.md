@@ -16,6 +16,17 @@ MongoDB Atlas notes
 - If you still get "bad auth", verify the username and password, URL-encode any special characters in the password, and avoid committing credentials to source control.
 
 If using a local MongoDB, set `MONGO_URI=mongodb://localhost:27017/expensesync` instead.
+
+Seeding a user (development)
+
+You can create a user from the repository to test the mobile app. Copy `.env.example` to `.env` and set `MONGO_URI`/`JWT_SECRET` first, then run:
+
+```powershell
+cd backend\scripts
+node createUser.js aliyanasghar@gmail.com "AliyanAsghar1/" "Aliyan Asghar"
+```
+
+This will create the user `aliyanasghar@gmail.com` with the password `AliyanAsghar1/` if it does not already exist.
 2. Install dependencies: `npm install`.
 3. Run: `npm run dev` (requires `nodemon`) or `npm start`.
 

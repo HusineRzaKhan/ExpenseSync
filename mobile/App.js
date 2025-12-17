@@ -1,20 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, TouchableOpacity, Image, Modal } from 'react-native';
+import { ThemeProvider, ThemeContext } from './theme';
+import SideMenu from './components/SideMenu';
+import AppBar from './components/AppBar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
 import HomeScreen from './screens/HomeScreen';
-import RecordExpenseScreen from './screens/RecordExpenseScreen';
+import CalendarScreen from './screens/CalendarScreen';
+import CategoriesScreen from './screens/CategoriesScreen';
+import BudgetScreen from './screens/BudgetScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function MainTabs({ navigation }) {
+  const [menuVisible, setMenuVisible] = useState(false);
+  const { toggleTheme } = React.useContext(ThemeContext);
+  return (
+    <>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
+        <Tab.Screen name="Categories" component={CategoriesScreen} />
+        <Tab.Screen name="Budget" component={BudgetScreen} />
+        <Tab.Screen name="Notifications" component={NotificationsScreen} />
+      </Tab.Navigator>
+      {menuVisible && (
+        <SideMenu
+          onClose={() => setMenuVisible(false)}
+          onProfile={() => { setMenuVisible(false); navigation.navigate('Profile'); }}
+          onToggleTheme={() => { toggleTheme(); }}
+          onLogout={async () => { await AsyncStorage.removeItem('token'); setMenuVisible(false); navigation.reset({ index: 0, routes: [{ name: 'Login' }] }); }}
+        />
+      )}
+    </>
+  );
+}
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Record" component={RecordExpenseScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }

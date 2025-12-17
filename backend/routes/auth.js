@@ -41,4 +41,34 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// GET /api/auth/me
+router.get('/me', authMiddleware = require('../middleware/auth'), async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+// PUT /api/auth/profile - update name, email, password
+router.put('/profile', require('../middleware/auth'), async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const updates = {};
+    if (name) updates.name = name;
+    if (email) updates.email = email;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(password, salt);
+    }
+    const user = await User.findByIdAndUpdate(req.user.id, { $set: updates }, { new: true }).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router;
