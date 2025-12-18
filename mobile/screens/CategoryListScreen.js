@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { ThemeContext } from '../theme';
 import axios from 'axios';
 import Config from '../config';
 
@@ -20,14 +21,15 @@ export default function CategoryListScreen({ route }) {
     load();
   }, [category]);
 
+  const { theme } = useContext(ThemeContext);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{category} expenses</Text>
+    <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#111' : '#fff' }]}>
+      <Text style={[styles.title, { color: theme === 'dark' ? '#fff' : '#000' }]}>{category} expenses</Text>
       <FlatList data={items} keyExtractor={i => i._id} renderItem={({ item }) => (
-        <View style={styles.row}><Text style={{ fontWeight: '700' }}>{item.notes}</Text><Text>PKR {item.amount}</Text></View>
+        <View style={[styles.row, { backgroundColor: theme === 'dark' ? '#222' : '#fff' }]}><Text style={{ fontWeight: '700', color: theme === 'dark' ? '#fff' : '#000' }}>{item.notes}</Text><Text style={{ color: theme === 'dark' ? '#ddd' : '#000' }}>PKR {item.amount}</Text></View>
       )} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({ container: { flex: 1, padding: 12 }, title: { fontSize: 20, fontWeight: '700', marginBottom: 8 }, row: { padding: 12, borderRadius: 8, backgroundColor: '#fff', marginBottom: 8 } });
+const styles = StyleSheet.create({ container: { flex: 1, padding: 12 }, title: { fontSize: 20, fontWeight: '700', marginBottom: 8 }, row: { padding: 12, borderRadius: 8, marginBottom: 8 } });

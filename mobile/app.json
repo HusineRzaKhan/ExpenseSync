@@ -16,5 +16,14 @@
         "projectId": "cb5ecda0-1cbc-490d-ba66-3938ad2e3a32"
       }
     }
+    ,
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f1f6fb"
+    },
+    "assetBundlePatterns": [
+      "assets/*"
+    ]
   }
 }

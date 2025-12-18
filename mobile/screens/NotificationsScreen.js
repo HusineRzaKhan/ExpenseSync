@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { ThemeContext } from '../theme';
 
 const sampleInit = [
   { id: '1', title: 'Expense recorded', body: 'Lunch recorded: PKR 250', read: false },
@@ -9,15 +10,16 @@ const sampleInit = [
 
 export default function NotificationsScreen() {
   const [list, setList] = useState(sampleInit);
+  const { theme } = useContext(ThemeContext);
   const onPress = (item) => {
     setList(l => l.map(x => x.id === item.id ? { ...x, read: true } : x));
   };
   return (
-    <View style={{ flex: 1, padding: 12 }}>
+    <View style={{ flex: 1, padding: 12, backgroundColor: theme === 'dark' ? '#111' : '#f8fafc' }}>
       <FlatList data={list} keyExtractor={i => i.id} renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => onPress(item)} style={{ padding: 12, backgroundColor: item.read ? '#f7f7f7' : '#fff', marginBottom: 8, borderRadius: 8 }}>
-          <Text style={{ fontWeight: '700' }}>{item.title}</Text>
-          <Text>{item.body}</Text>
+        <TouchableOpacity onPress={() => onPress(item)} style={{ padding: 12, backgroundColor: item.read ? (theme === 'dark' ? '#222' : '#f7f7f7') : (theme === 'dark' ? '#222' : '#fff'), marginBottom: 8, borderRadius: 8 }}>
+          <Text style={{ fontWeight: '700', color: theme === 'dark' ? '#fff' : '#000' }}>{item.title}</Text>
+          <Text style={{ color: theme === 'dark' ? '#ddd' : '#000' }}>{item.body}</Text>
         </TouchableOpacity>
       )} />
     </View>

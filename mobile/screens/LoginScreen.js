@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, TextInput, Button, Alert, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { ThemeContext } from '../theme';
 import AppBar from '../components/AppBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -30,14 +31,17 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={[styles.screen, { backgroundColor: useContext(ThemeContext).theme === 'dark' ? '#111' : '#f1f6fb' }]}>
       <AppBar showAvatar={false} />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ width: '90%', maxWidth: 420, padding: 16, alignItems: 'stretch' }}>
-          <Text style={{ fontSize: 20, marginBottom: 12, textAlign: 'center' }}>Sign In</Text>
-          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} keyboardType="email-address" autoCapitalize="none" />
-          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} />
-          <Button title="Sign In" onPress={doLogin} />
+      <View style={styles.center}>
+        <View style={[styles.card, { backgroundColor: useContext(ThemeContext).theme === 'dark' ? '#222' : '#fff' }]}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <Text style={styles.heading}>Sign In</Text>
+          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" autoCapitalize="none" />
+          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={styles.input} />
+          <View style={{ marginTop: 8 }}>
+            <Button title="Sign In" onPress={doLogin} />
+          </View>
           <TouchableOpacity style={{ marginTop: 12, alignSelf: 'center' }} onPress={() => navigation.navigate('Signup')}>
             <Text style={{ color: '#007bff' }}>Don't have an account? Sign up</Text>
           </TouchableOpacity>
@@ -46,3 +50,12 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#f1f6fb' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  card: { width: '90%', maxWidth: 420, padding: 20, borderRadius: 12, shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 20, elevation: 6, alignItems: 'stretch' },
+  logo: { width: 84, height: 84, alignSelf: 'center', marginBottom: 12, borderRadius: 12 },
+  heading: { fontSize: 22, fontWeight: '700', textAlign: 'center', marginBottom: 12 },
+  input: { marginBottom: 12, borderWidth: 1, borderColor: '#e6ecf1', padding: 10, borderRadius: 8 },
+});

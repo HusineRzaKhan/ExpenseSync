@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, Text } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, TextInput, Button, Alert, Text, Image, StyleSheet } from 'react-native';
+import { ThemeContext } from '../theme';
 import AppBar from '../components/AppBar';
 import axios from 'axios';
 import Config from '../config';
@@ -42,24 +43,37 @@ export default function SignupScreen({ navigation }) {
 
   const pwCheck = validatePassword(password);
 
+  const { theme } = useContext(ThemeContext);
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={[styles.screen, { backgroundColor: theme === 'dark' ? '#111' : '#f1f6fb' }]}>
       <AppBar showAvatar={false} />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ width: '90%', maxWidth: 420, padding: 16 }}>
-          <Text style={{ fontSize: 20, marginBottom: 12, textAlign: 'center' }}>Sign Up</Text>
-          <TextInput placeholder="Full name" value={name} onChangeText={setName} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} />
-          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} keyboardType="email-address" autoCapitalize="none" />
-          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 8, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} />
-          <Text style={{ marginTop: 8 }}>Password rules:</Text>
+      <View style={styles.center}>
+        <View style={[styles.card, { backgroundColor: theme === 'dark' ? '#222' : '#fff' }] }>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <Text style={styles.heading}>Create Account</Text>
+          <TextInput placeholder="Full name" value={name} onChangeText={setName} style={styles.input} />
+          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" autoCapitalize="none" />
+          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={styles.input} />
+          <Text style={{ marginBottom: 8, color: '#666' }}>Password rules shown below</Text>
           <Text>- Minimum 8 characters: {pwCheck.length ? '✓' : '✗'}</Text>
           <Text>- Uppercase letter: {pwCheck.upper ? '✓' : '✗'}</Text>
           <Text>- Lowercase letter: {pwCheck.lower ? '✓' : '✗'}</Text>
           <Text>- Number: {pwCheck.number ? '✓' : '✗'}</Text>
           <Text>- Special character: {pwCheck.special ? '✓' : '✗'}</Text>
-          <Button title="Sign Up" onPress={doSignup} />
+          <View style={{ marginTop: 12 }}>
+            <Button title="Sign Up" onPress={doSignup} />
+          </View>
         </View>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#f1f6fb' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  card: { width: '90%', maxWidth: 520, padding: 20, borderRadius: 12, shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 20, elevation: 6 },
+  logo: { width: 84, height: 84, alignSelf: 'center', marginBottom: 12, borderRadius: 12 },
+  heading: { fontSize: 22, fontWeight: '700', textAlign: 'center', marginBottom: 12 },
+  input: { marginBottom: 12, borderWidth: 1, borderColor: '#e6ecf1', padding: 10, borderRadius: 8 },
+});

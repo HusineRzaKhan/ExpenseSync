@@ -51,7 +51,7 @@ export default function ProfileScreen({ onClose }) {
   };
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={{ flex: 1, padding: 16, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
       <View style={{ alignItems: 'center', marginBottom: 12 }}>
         <TouchableOpacity onPress={pick}>
           <Image source={{ uri: image || 'https://i.pravatar.cc/150' }} style={{ width: 120, height: 120, borderRadius: 60 }} />

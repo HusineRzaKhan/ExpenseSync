@@ -67,9 +67,9 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, theme === 'dark' && styles.dark]}>
+    <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#111' : '#fff' }] }>
       <View style={styles.header}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>Homepage</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.newBtn}>
           <Text style={styles.newBtnText}>+ New Record</Text>
         </TouchableOpacity>
@@ -84,8 +84,7 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  dark: { backgroundColor: '#111' },
+  container: { flex: 1 },
   header: { padding: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { fontSize: 24, fontWeight: '700' },
   newBtn: { backgroundColor: '#f6c23e', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8 },

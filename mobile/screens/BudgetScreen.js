@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Button } from 'react-native';
+import { ThemeContext } from '../theme';
 import { LineChart } from 'react-native-chart-kit';
 import { Share } from 'react-native';
 import axios from 'axios';
@@ -11,6 +12,7 @@ import AppBar from '../components/AppBar';
 import { TextInput } from 'react-native';
 
 export default function BudgetScreen() {
+  const { theme } = useContext(ThemeContext);
   const [days, setDays] = useState(7);
   const [fromDate, setFromDate] = useState(() => {
     const d = new Date(); d.setDate(d.getDate() - 6); return d.toISOString().slice(0,10);
@@ -22,13 +24,13 @@ export default function BudgetScreen() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 12 }}>
-      <Text style={{ fontSize: 18 }}>Budget Tracking (last {days} days)</Text>
+    <View style={{ flex: 1, padding: 12, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
+      <Text style={{ fontSize: 18, color: theme === 'dark' ? '#fff' : '#000' }}>Budget Tracking (last {days} days)</Text>
       <View style={{ flexDirection: 'row', gap: 8, marginVertical: 8 }}>
         <TextInput value={fromDate} onChangeText={setFromDate} style={{ borderWidth: 1, borderColor: '#ddd', padding: 8, flex: 1 }} />
         <TextInput value={toDate} onChangeText={setToDate} style={{ borderWidth: 1, borderColor: '#ddd', padding: 8, flex: 1 }} />
       </View>
-      <LineChart data={data} width={350} height={220} chartConfig={{ backgroundGradientFrom:'#fff', backgroundGradientTo:'#fff', color:()=>'#4caf50' }} />
+      <LineChart data={data} width={350} height={220} chartConfig={{ backgroundGradientFrom: theme === 'dark' ? '#111' : '#fff', backgroundGradientTo: theme === 'dark' ? '#111' : '#fff', color:()=>'#4caf50' }} />
       <View style={{ marginTop: 12 }}>
         <Button title="Set 7 days" onPress={() => setDays(7)} />
         <View style={{ height: 8 }} />

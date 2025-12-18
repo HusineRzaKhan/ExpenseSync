@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Modal, View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { ThemeContext } from '../theme';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -68,7 +69,7 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: (useContext(ThemeContext).theme === 'dark' ? '#111' : '#fff') }]}>
         <Text style={styles.title}>New Record</Text>
         <TextInput placeholder="Name (optional)" value={name} onChangeText={setName} style={styles.input} />
         <TextInput placeholder="Description" value={desc} onChangeText={setDesc} style={styles.input} />
@@ -112,7 +113,7 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
+  container: { flex: 1, padding: 16 },
   title: { fontSize: 20, fontWeight: '700', marginBottom: 12 },
   input: { borderWidth: 1, borderColor: '#ddd', padding: 8, marginBottom: 8, borderRadius: 6 },
 });
