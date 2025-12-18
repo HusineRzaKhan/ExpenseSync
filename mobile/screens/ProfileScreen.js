@@ -5,6 +5,7 @@ import { ThemeContext } from '../theme';
 import axios from 'axios';
 import Config from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 export default function ProfileScreen({ onClose }) {
   const [name, setName] = useState('');
@@ -19,6 +20,21 @@ export default function ProfileScreen({ onClose }) {
     const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.7 });
     if (!r.cancelled) setImage(r.uri);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) return;
+        const res = await axios.get(`${Config.API_URL}/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const u = res.data || {};
+        setName(u.name || '');
+        setEmail(u.email || '');
+      } catch (err) {
+        console.warn('Failed to load profile', err.message);
+      }
+    })();
+  }, []);
 
   const save = async () => {
     try {
@@ -39,6 +55,9 @@ export default function ProfileScreen({ onClose }) {
       const body = { name, email, password };
       if (token) {
         const res = await axios.put(`${Config.API_URL}/auth/profile`, body, { headers: { Authorization: `Bearer ${token}` } });
+        const u = res.data || {};
+        setName(u.name || name);
+        setEmail(u.email || email);
         Alert.alert('Saved', 'Profile updated');
       } else {
         Alert.alert('Saved (local)', 'No token found');
