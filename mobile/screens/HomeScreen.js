@@ -19,14 +19,16 @@ export default function HomeScreen({ navigation }) {
     // load recent records (placeholder)
     async function load() {
       try {
-        const res = await axios.get(`${Config.API_URL}/transactions`);
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          setRecords([]);
+          return;
+        }
+        const res = await axios.get(`${Config.API_URL}/transactions`, { headers: { Authorization: `Bearer ${token}` } });
         setRecords(res.data || []);
       } catch (err) {
-        // fallback to local sample
-        setRecords([
-          { _id: '1', amount: 250, category: 'food', notes: 'Lunch', date: new Date() },
-          { _id: '2', amount: 1200, category: 'fuel', notes: 'Petrol', date: new Date() },
-        ]);
+        // on error, show empty list (no demo data for new users)
+        setRecords([]);
       }
     }
     load();
@@ -69,13 +71,19 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#111' : '#fff' }] }>
       <View style={styles.header}>
-        <Text style={styles.title}></Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.newBtn}>
-          <Text style={styles.newBtnText}>+ New Record</Text>
+        <Text style={[styles.title, { color: theme === 'dark' ? '#fff' : '#000' }]}>Home</Text>
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.newBtn, { backgroundColor: theme === 'dark' ? '#f6c23e' : '#f6c23e' }]}>
+          <Text style={[styles.newBtnText, { color: theme === 'dark' ? '#000' : '#000' }]}>+ New Record</Text>
         </TouchableOpacity>
       </View>
 
-      <FlatList data={records} keyExtractor={i => i._id} renderItem={({ item }) => <ExpenseCard item={item} onPress={() => setDetail(item)} onEdit={onEdit} onDelete={onDelete} />} contentContainerStyle={{ padding: 12 }} />
+      {records.length === 0 ? (
+        <View style={{ padding: 24, alignItems: 'center' }}>
+          <Text style={{ color: theme === 'dark' ? '#ddd' : '#444', fontSize: 16 }}>No records yet. Tap "+ New Record" to add one.</Text>
+        </View>
+      ) : (
+        <FlatList data={records} keyExtractor={i => i._id} renderItem={({ item }) => <ExpenseCard item={item} onPress={() => setDetail(item)} onEdit={onEdit} onDelete={onDelete} />} contentContainerStyle={{ padding: 12 }} />
+      )}
 
       <RecordModal visible={modalVisible} onClose={() => setModalVisible(false)} onCreate={onCreate} />
       <ExpenseDetailModal item={detail} onClose={() => setDetail(null)} />
