@@ -69,7 +69,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#111' : '#fff' }] }>
       <View style={styles.header}>
-        <Text style={styles.title}>Homepage</Text>
+        <Text style={styles.title}></Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.newBtn}>
           <Text style={styles.newBtnText}>+ New Record</Text>
         </TouchableOpacity>

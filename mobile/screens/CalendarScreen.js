@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Button } from 'react-native';
+import { ThemeContext } from '../theme';
 
 import { Picker } from '@react-native-picker/picker';
 import { Calendar } from 'react-native-calendars';
@@ -7,6 +8,7 @@ import axios from 'axios';
 import Config from '../config';
 
 export default function CalendarScreen() {
+  const { theme } = useContext(ThemeContext);
   const [selected, setSelected] = useState();
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
@@ -36,9 +38,34 @@ export default function CalendarScreen() {
 
   const [showCalendar, setShowCalendar] = useState(false);
 
+  const bg = theme === 'dark' ? '#111' : '#fff';
+  const cardBg = theme === 'dark' ? '#0f0f0f' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#000';
+  const calendarTheme = theme === 'dark' ? {
+    backgroundColor: '#111',
+    calendarBackground: '#111',
+    textSectionTitleColor: '#bbb',
+    selectedDayBackgroundColor: '#F6C23E',
+    selectedDayTextColor: '#000',
+    todayTextColor: '#fff',
+    dayTextColor: '#fff',
+    monthTextColor: '#fff',
+    arrowColor: '#fff'
+  } : {
+    backgroundColor: '#fff',
+    calendarBackground: '#fff',
+    textSectionTitleColor: '#333',
+    selectedDayBackgroundColor: '#F6C23E',
+    selectedDayTextColor: '#000',
+    todayTextColor: '#000',
+    dayTextColor: '#000',
+    monthTextColor: '#000',
+    arrowColor: '#000'
+  };
+
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: 'row', padding: 12, alignItems: 'center' }}>
+    <View style={{ flex: 1, backgroundColor: bg }}>
+      <View style={{ flexDirection: 'row', padding: 12, alignItems: 'center', backgroundColor: cardBg }}>
         <Picker selectedValue={day} style={{ flex: 1 }} onValueChange={v => setDay(v)}>
           {Array.from({ length: 31 }, (_, i) => <Picker.Item key={i+1} label={`${i+1}`} value={i+1} />)}
         </Picker>
@@ -54,11 +81,11 @@ export default function CalendarScreen() {
       </View>
       <View style={{ padding: 12 }}>
         <Button title={showCalendar ? 'Hide calendar' : 'Show calendar'} onPress={() => setShowCalendar(s => !s)} />
-        {showCalendar && <Calendar onDayPress={d => { const parts = d.dateString.split('-'); setYear(Number(parts[0])); setMonth(Number(parts[1])); setDay(Number(parts[2])); setSelected(d.dateString); }} markedDates={{ [selected]: { selected: true } }} />}
-        <Text style={{ fontSize: 18, marginTop: 8 }}>Selected: {selected || 'None'}</Text>
-        <Text style={{ fontSize: 18, marginTop: 8 }}>Total: PKR {total}</Text>
+        {showCalendar && <Calendar theme={calendarTheme} onDayPress={d => { const parts = d.dateString.split('-'); setYear(Number(parts[0])); setMonth(Number(parts[1])); setDay(Number(parts[2])); setSelected(d.dateString); }} markedDates={{ [selected]: { selected: true } }} />}
+        <Text style={{ fontSize: 18, marginTop: 8, color: textColor }}>Selected: {selected || 'None'}</Text>
+        <Text style={{ fontSize: 18, marginTop: 8, color: textColor }}>Total: PKR {total}</Text>
       </View>
-      <FlatList data={records} keyExtractor={i => i._id} renderItem={({ item }) => <Text style={{ padding: 8 }}>{item.notes} - PKR {item.amount}</Text>} />
+      <FlatList data={records} keyExtractor={i => i._id} renderItem={({ item }) => <Text style={{ padding: 8, color: textColor }}>{item.notes} - PKR {item.amount}</Text>} />
     </View>
   );
 }

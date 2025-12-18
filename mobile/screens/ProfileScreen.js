@@ -50,19 +50,25 @@ export default function ProfileScreen({ onClose }) {
     }
   };
 
+  const bg = theme === 'dark' ? '#111' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#000';
+  const labelColor = theme === 'dark' ? '#ddd' : '#333';
+  const inputBorder = theme === 'dark' ? '#444' : '#ddd';
+  const placeholderColor = theme === 'dark' ? '#999' : '#666';
+
   return (
-    <View style={{ flex: 1, padding: 16, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
+    <View style={{ flex: 1, padding: 16, backgroundColor: bg }}>
       <View style={{ alignItems: 'center', marginBottom: 12 }}>
         <TouchableOpacity onPress={pick}>
-          <Image source={{ uri: image || 'https://i.pravatar.cc/150' }} style={{ width: 120, height: 120, borderRadius: 60 }} />
+          <Image source={{ uri: image || 'https://i.pravatar.cc/150' }} style={{ width: 120, height: 120, borderRadius: 60, borderWidth: 2, borderColor: theme === 'dark' ? '#333' : '#eee' }} />
         </TouchableOpacity>
       </View>
-      <Text>Full name</Text>
-      <TextInput value={name} onChangeText={setName} style={styles.input} />
-      <Text>Email</Text>
-      <TextInput value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
-      <Text>Change password</Text>
-      <TextInput value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
+      <Text style={{ color: labelColor, marginBottom: 4 }}>Full name</Text>
+      <TextInput value={name} onChangeText={setName} style={[styles.input, { color: textColor, borderColor: inputBorder }]} placeholderTextColor={placeholderColor} />
+      <Text style={{ color: labelColor, marginBottom: 4 }}>Email</Text>
+      <TextInput value={email} onChangeText={setEmail} style={[styles.input, { color: textColor, borderColor: inputBorder }]} keyboardType="email-address" placeholderTextColor={placeholderColor} />
+      <Text style={{ color: labelColor, marginBottom: 4 }}>Change password</Text>
+      <TextInput value={password} onChangeText={setPassword} style={[styles.input, { color: textColor, borderColor: inputBorder }]} secureTextEntry placeholderTextColor={placeholderColor} />
 
       <View style={{ marginTop: 12 }}>
         <Button title="Save" onPress={save} />

@@ -44,22 +44,28 @@ export default function SignupScreen({ navigation }) {
   const pwCheck = validatePassword(password);
 
   const { theme } = useContext(ThemeContext);
+  const bg = theme === 'dark' ? '#111' : '#f1f6fb';
+  const cardBg = theme === 'dark' ? '#222' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#000';
+  const inputBorder = theme === 'dark' ? '#444' : '#e6ecf1';
+  const placeholderColor = theme === 'dark' ? '#aaa' : '#666';
+
   return (
-    <View style={[styles.screen, { backgroundColor: theme === 'dark' ? '#111' : '#f1f6fb' }]}>
+    <View style={[styles.screen, { backgroundColor: bg }]}>
       <AppBar showAvatar={false} />
       <View style={styles.center}>
-        <View style={[styles.card, { backgroundColor: theme === 'dark' ? '#222' : '#fff' }] }>
+        <View style={[styles.card, { backgroundColor: cardBg }] }>
           <Image source={require('../assets/logo.png')} style={styles.logo} />
-          <Text style={styles.heading}>Create Account</Text>
-          <TextInput placeholder="Full name" value={name} onChangeText={setName} style={styles.input} />
-          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" autoCapitalize="none" />
-          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={styles.input} />
-          <Text style={{ marginBottom: 8, color: '#666' }}>Password rules shown below</Text>
-          <Text>- Minimum 8 characters: {pwCheck.length ? '✓' : '✗'}</Text>
-          <Text>- Uppercase letter: {pwCheck.upper ? '✓' : '✗'}</Text>
-          <Text>- Lowercase letter: {pwCheck.lower ? '✓' : '✗'}</Text>
-          <Text>- Number: {pwCheck.number ? '✓' : '✗'}</Text>
-          <Text>- Special character: {pwCheck.special ? '✓' : '✗'}</Text>
+          <Text style={[styles.heading, { color: textColor }]}>Create Account</Text>
+          <TextInput placeholder="Full name" placeholderTextColor={placeholderColor} value={name} onChangeText={setName} style={[styles.input, { color: textColor, borderColor: inputBorder }]} />
+          <TextInput placeholder="Email" placeholderTextColor={placeholderColor} value={email} onChangeText={setEmail} style={[styles.input, { color: textColor, borderColor: inputBorder }]} keyboardType="email-address" autoCapitalize="none" />
+          <TextInput placeholder="Password" placeholderTextColor={placeholderColor} value={password} secureTextEntry onChangeText={setPassword} style={[styles.input, { color: textColor, borderColor: inputBorder }]} />
+          <Text style={{ marginBottom: 8, color: theme === 'dark' ? '#bbb' : '#666' }}>Password rules shown below</Text>
+          <Text style={{ color: textColor }}>- Minimum 8 characters: {pwCheck.length ? '✓' : '✗'}</Text>
+          <Text style={{ color: textColor }}>- Uppercase letter: {pwCheck.upper ? '✓' : '✗'}</Text>
+          <Text style={{ color: textColor }}>- Lowercase letter: {pwCheck.lower ? '✓' : '✗'}</Text>
+          <Text style={{ color: textColor }}>- Number: {pwCheck.number ? '✓' : '✗'}</Text>
+          <Text style={{ color: textColor }}>- Special character: {pwCheck.special ? '✓' : '✗'}</Text>
           <View style={{ marginTop: 12 }}>
             <Button title="Sign Up" onPress={doSignup} />
           </View>

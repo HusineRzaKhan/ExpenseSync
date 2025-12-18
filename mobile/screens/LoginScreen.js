@@ -16,6 +16,7 @@ function validateEmail(email) {
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { theme } = useContext(ThemeContext);
 
   const doLogin = async () => {
     if (!validateEmail(email)) return Alert.alert('Invalid email');
@@ -30,15 +31,21 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  const bg = theme === 'dark' ? '#111' : '#f1f6fb';
+  const cardBg = theme === 'dark' ? '#222' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#000';
+  const inputBorder = theme === 'dark' ? '#444' : '#e6ecf1';
+  const placeholderColor = theme === 'dark' ? '#aaa' : '#666';
+
   return (
-    <View style={[styles.screen, { backgroundColor: useContext(ThemeContext).theme === 'dark' ? '#111' : '#f1f6fb' }]}>
+    <View style={[styles.screen, { backgroundColor: bg }]}>
       <AppBar showAvatar={false} />
       <View style={styles.center}>
         <View style={[styles.card, { backgroundColor: useContext(ThemeContext).theme === 'dark' ? '#222' : '#fff' }]}>
           <Image source={require('../assets/logo.png')} style={styles.logo} />
-          <Text style={styles.heading}>Sign In</Text>
-          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" autoCapitalize="none" />
-          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={styles.input} />
+          <Text style={[styles.heading, { color: textColor }]}>Sign In</Text>
+          <TextInput placeholder="Email" placeholderTextColor={placeholderColor} value={email} onChangeText={setEmail} style={[styles.input, { color: textColor, borderColor: inputBorder }]} keyboardType="email-address" autoCapitalize="none" />
+          <TextInput placeholder="Password" placeholderTextColor={placeholderColor} value={password} secureTextEntry onChangeText={setPassword} style={[styles.input, { color: textColor, borderColor: inputBorder }]} />
           <View style={{ marginTop: 8 }}>
             <Button title="Sign In" onPress={doLogin} />
           </View>

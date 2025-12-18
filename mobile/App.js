@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { ThemeProvider, ThemeContext } from './theme';
 import SideMenu from './components/SideMenu';
 import AppBar from './components/AppBar';
@@ -59,24 +59,30 @@ function MainTabs({ navigation }) {
   );
 }
 
+function InnerApp() {
+  const { theme } = React.useContext(ThemeContext);
+  Text.defaultProps = Text.defaultProps || {};
+  Text.defaultProps.style = Text.defaultProps.style || {};
+  Text.defaultProps.style.color = theme === 'dark' ? '#fff' : '#000';
+  return (
+    <View style={{ flex: 1, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="Main" component={MainTabs} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="CategoryList" component={require('./screens/CategoryListScreen').default} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
+  );
+}
+
 export default function App() {
   return (
     <ThemeProvider>
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <View style={{ flex: 1, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
-            <NavigationContainer>
-              <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Signup" component={SignupScreen} />
-                <Stack.Screen name="Main" component={MainTabs} />
-                <Stack.Screen name="Profile" component={ProfileScreen} />
-                <Stack.Screen name="CategoryList" component={require('./screens/CategoryListScreen').default} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </View>
-        )}
-      </ThemeContext.Consumer>
+      <InnerApp />
     </ThemeProvider>
   );
 }
