@@ -23,7 +23,7 @@ export default function SideMenu({ onClose, onProfile, onToggleTheme, onLogout }
         <View style={styles.qrBlock}>
           <Text style={{ fontWeight: '700', marginBottom: 8 }}>Get the app</Text>
           <Text style={{ color: '#666', marginBottom: 8 }}>Scan to download</Text>
-          <QRCode value={'https://example.com/expenssync'} size={120} />
+          <QRCode value={'https://expo.dev/accounts/hussainrazakhan/projects/expensesync/builds/65b2dee0-91ac-48e8-99e9-3c1950807f27'} size={120} />
         </View>
       </View>
     </Modal>

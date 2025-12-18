@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, Text, TouchableOpacity } from 'react-native';
+import AppBar from '../components/AppBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Config from '../config';
@@ -29,14 +30,17 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 8 }}>Login</Text>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <AppBar showAvatar={false} title="Sign In" />
+      <View style={{ padding: 16 }}>
+        <Text style={{ fontSize: 20, marginBottom: 8 }}>Sign In</Text>
       <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 8 }} keyboardType="email-address" autoCapitalize="none" />
       <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 8 }} />
-      <Button title="Login" onPress={doLogin} />
+      <Button title="Sign In" onPress={doLogin} />
       <TouchableOpacity style={{ marginTop: 12 }} onPress={() => navigation.navigate('Signup')}>
         <Text style={{ color: '#007bff' }}>Don't have an account? Sign up</Text>
       </TouchableOpacity>
+      </View>
     </View>
   );
 }

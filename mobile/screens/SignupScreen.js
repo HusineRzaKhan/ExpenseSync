@@ -3,6 +3,7 @@ import { View, TextInput, Button, Alert, Text } from 'react-native';
 import axios from 'axios';
 import Config from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppBar from '../components/AppBar';
 
 const API = Config.API_URL;
 
@@ -27,14 +28,14 @@ export default function SignupScreen({ navigation }) {
 
   const doSignup = async () => {
     if (!name) return Alert.alert('Enter name');
+    if (/\d/.test(name)) return Alert.alert('Name cannot contain numbers');
     if (!validateEmail(email)) return Alert.alert('Invalid email');
     const resPw = validatePassword(password);
     if (!resPw.ok) return Alert.alert('Password must be at least 8 chars and include upper, lower, number, special');
     try {
       const r = await axios.post(`${API}/auth/signup`, { name, email, password });
-      const token = r.data.token;
-      await AsyncStorage.setItem('token', token);
-      navigation.replace('Main');
+      // on successful signup, show a success message and redirect to Sign In
+      Alert.alert('Success', 'Account created. Please sign in.', [{ text: 'OK', onPress: () => navigation.navigate('Login') }]);
     } catch (err) {
       Alert.alert('Signup failed', err.response?.data?.message || 'Network error');
     }
@@ -43,8 +44,10 @@ export default function SignupScreen({ navigation }) {
   const pwCheck = validatePassword(password);
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 8 }}>Sign Up</Text>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <AppBar showAvatar={false} title="Sign Up" />
+      <View style={{ padding: 16 }}>
+        <Text style={{ fontSize: 20, marginBottom: 8 }}>Sign Up</Text>
       <TextInput placeholder="Full name" value={name} onChangeText={setName} style={{ marginBottom: 8 }} />
       <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 8 }} keyboardType="email-address" autoCapitalize="none" />
       <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 8 }} />
