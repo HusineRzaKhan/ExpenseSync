@@ -31,15 +31,17 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <AppBar showAvatar={false} title="Sign In" />
-      <View style={{ padding: 16 }}>
-        <Text style={{ fontSize: 20, marginBottom: 8 }}>Sign In</Text>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 8 }} keyboardType="email-address" autoCapitalize="none" />
-      <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 8 }} />
-      <Button title="Sign In" onPress={doLogin} />
-      <TouchableOpacity style={{ marginTop: 12 }} onPress={() => navigation.navigate('Signup')}>
-        <Text style={{ color: '#007bff' }}>Don't have an account? Sign up</Text>
-      </TouchableOpacity>
+      <AppBar showAvatar={false} />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: '90%', maxWidth: 420, padding: 16, alignItems: 'stretch' }}>
+          <Text style={{ fontSize: 20, marginBottom: 12, textAlign: 'center' }}>Sign In</Text>
+          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} keyboardType="email-address" autoCapitalize="none" />
+          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} />
+          <Button title="Sign In" onPress={doLogin} />
+          <TouchableOpacity style={{ marginTop: 12, alignSelf: 'center' }} onPress={() => navigation.navigate('Signup')}>
+            <Text style={{ color: '#007bff' }}>Don't have an account? Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

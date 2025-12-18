@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, Text } from 'react-native';
+import AppBar from '../components/AppBar';
 import axios from 'axios';
 import Config from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppBar from '../components/AppBar';
 
 const API = Config.API_URL;
 
@@ -28,14 +28,13 @@ export default function SignupScreen({ navigation }) {
 
   const doSignup = async () => {
     if (!name) return Alert.alert('Enter name');
-    if (/\d/.test(name)) return Alert.alert('Name cannot contain numbers');
     if (!validateEmail(email)) return Alert.alert('Invalid email');
     const resPw = validatePassword(password);
     if (!resPw.ok) return Alert.alert('Password must be at least 8 chars and include upper, lower, number, special');
     try {
       const r = await axios.post(`${API}/auth/signup`, { name, email, password });
-      // on successful signup, show a success message and redirect to Sign In
-      Alert.alert('Success', 'Account created. Please sign in.', [{ text: 'OK', onPress: () => navigation.navigate('Login') }]);
+      // do not auto-login; show success and go to sign in
+      Alert.alert('Success', 'Account created. Please sign in.', [{ text: 'OK', onPress: () => navigation.replace('Login') }]);
     } catch (err) {
       Alert.alert('Signup failed', err.response?.data?.message || 'Network error');
     }
@@ -45,19 +44,22 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <AppBar showAvatar={false} title="Sign Up" />
-      <View style={{ padding: 16 }}>
-        <Text style={{ fontSize: 20, marginBottom: 8 }}>Sign Up</Text>
-      <TextInput placeholder="Full name" value={name} onChangeText={setName} style={{ marginBottom: 8 }} />
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 8 }} keyboardType="email-address" autoCapitalize="none" />
-      <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 8 }} />
-      <Text>Password rules:</Text>
-      <Text>- Minimum 8 characters: {pwCheck.length ? '✓' : '✗'}</Text>
-      <Text>- Uppercase letter: {pwCheck.upper ? '✓' : '✗'}</Text>
-      <Text>- Lowercase letter: {pwCheck.lower ? '✓' : '✗'}</Text>
-      <Text>- Number: {pwCheck.number ? '✓' : '✗'}</Text>
-      <Text>- Special character: {pwCheck.special ? '✓' : '✗'}</Text>
-      <Button title="Sign up" onPress={doSignup} />
+      <AppBar showAvatar={false} />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: '90%', maxWidth: 420, padding: 16 }}>
+          <Text style={{ fontSize: 20, marginBottom: 12, textAlign: 'center' }}>Sign Up</Text>
+          <TextInput placeholder="Full name" value={name} onChangeText={setName} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} />
+          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 12, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} keyboardType="email-address" autoCapitalize="none" />
+          <TextInput placeholder="Password" value={password} secureTextEntry onChangeText={setPassword} style={{ marginBottom: 8, borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 6 }} />
+          <Text style={{ marginTop: 8 }}>Password rules:</Text>
+          <Text>- Minimum 8 characters: {pwCheck.length ? '✓' : '✗'}</Text>
+          <Text>- Uppercase letter: {pwCheck.upper ? '✓' : '✗'}</Text>
+          <Text>- Lowercase letter: {pwCheck.lower ? '✓' : '✗'}</Text>
+          <Text>- Number: {pwCheck.number ? '✓' : '✗'}</Text>
+          <Text>- Special character: {pwCheck.special ? '✓' : '✗'}</Text>
+          <Button title="Sign Up" onPress={doSignup} />
+        </View>
+      </View>
     </View>
   );
 }
