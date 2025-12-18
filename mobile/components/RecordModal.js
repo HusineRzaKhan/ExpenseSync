@@ -35,6 +35,13 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
     if (!r.cancelled) setImage(r.uri);
   };
 
+  const { theme } = useContext(ThemeContext);
+  const bg = theme === 'dark' ? '#111' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#000';
+  const labelColor = theme === 'dark' ? '#ddd' : '#333';
+  const inputBorder = theme === 'dark' ? '#444' : '#ddd';
+  const placeholderColor = theme === 'dark' ? '#999' : '#666';
+
   const submit = async () => {
     if (!amount) return alert('Enter amount');
     const cleaned = String(amount).trim();
@@ -69,36 +76,36 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={[styles.container, { backgroundColor: (useContext(ThemeContext).theme === 'dark' ? '#111' : '#fff') }]}>
-        <Text style={styles.title}>New Record</Text>
-        <TextInput placeholder="Name (optional)" value={name} onChangeText={setName} style={styles.input} />
-        <TextInput placeholder="Description" value={desc} onChangeText={setDesc} style={styles.input} />
-          <TextInput placeholder="Amount" value={amount} onChangeText={t => setAmount(t.replace(/[^0-9.]/g, ''))} keyboardType="numeric" style={styles.input} />
-          <Text style={{ marginTop: 6 }}>Currency</Text>
-          <Picker selectedValue={currency} onValueChange={setCurrency} style={{ marginBottom: 8 }}>
-            <Picker.Item label="PKR" value="PKR" />
-            <Picker.Item label="USD" value="USD" />
-            <Picker.Item label="GBP" value="GBP" />
+      <View style={[styles.container, { backgroundColor: bg }] }>
+        <Text style={[styles.title, { color: textColor }]}>{initial ? 'Edit Record' : 'New Record'}</Text>
+        <TextInput placeholder="Name (optional)" placeholderTextColor={placeholderColor} value={name} onChangeText={setName} style={[styles.input, { color: textColor, borderColor: inputBorder }]} />
+        <TextInput placeholder="Description" placeholderTextColor={placeholderColor} value={desc} onChangeText={setDesc} style={[styles.input, { color: textColor, borderColor: inputBorder }]} />
+          <TextInput placeholder="Amount" placeholderTextColor={placeholderColor} value={amount} onChangeText={t => setAmount(t.replace(/[^0-9.]/g, ''))} keyboardType="numeric" style={[styles.input, { color: textColor, borderColor: inputBorder }]} />
+          <Text style={{ marginTop: 6, color: labelColor }}>Currency</Text>
+          <Picker selectedValue={currency} onValueChange={setCurrency} style={{ marginBottom: 8, color: textColor }} itemStyle={{ color: textColor }}>
+            <Picker.Item label="PKR" value="PKR" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="USD" value="USD" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="GBP" value="GBP" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
           </Picker>
-          <Text style={{ marginTop: 6 }}>Payment method</Text>
-          <Picker selectedValue={method} onValueChange={setMethod} style={{ marginBottom: 8 }}>
-            <Picker.Item label="Cash" value="cash" />
-            <Picker.Item label="Card/Online" value="online" />
+          <Text style={{ marginTop: 6, color: labelColor }}>Payment method</Text>
+          <Picker selectedValue={method} onValueChange={setMethod} style={{ marginBottom: 8, color: textColor }} itemStyle={{ color: textColor }}>
+            <Picker.Item label="Cash" value="cash" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Card/Online" value="online" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
           </Picker>
-          <Text style={{ marginTop: 6 }}>Category</Text>
-          <Picker selectedValue={category} onValueChange={setCategory} style={{ marginBottom: 8 }}>
-            <Picker.Item label="Food" value="Food" />
-            <Picker.Item label="Household" value="Household" />
-            <Picker.Item label="Friends" value="Friends" />
-            <Picker.Item label="Personal" value="Personal" />
-            <Picker.Item label="Rent" value="Rent" />
-            <Picker.Item label="Fuel" value="Fuel" />
-            <Picker.Item label="Loans" value="Loans" />
-            <Picker.Item label="Insurance" value="Insurance" />
-            <Picker.Item label="Other" value="Other" />
+          <Text style={{ marginTop: 6, color: labelColor }}>Category</Text>
+          <Picker selectedValue={category} onValueChange={setCategory} style={{ marginBottom: 8, color: textColor }} itemStyle={{ color: textColor }}>
+            <Picker.Item label="Food" value="Food" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Household" value="Household" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Friends" value="Friends" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Personal" value="Personal" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Rent" value="Rent" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Fuel" value="Fuel" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Loans" value="Loans" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Insurance" value="Insurance" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
+            <Picker.Item label="Other" value="Other" color={Platform.OS === 'android' ? (theme === 'dark' ? '#000' : textColor) : textColor} />
           </Picker>
-        <Text style={{ marginTop: 6 }}>Date (ISO)</Text>
-        <TextInput value={date instanceof Date ? date.toISOString() : String(date)} onChangeText={t => setDate(new Date(t))} style={styles.input} />
+        <Text style={{ marginTop: 6, color: labelColor }}>Date (ISO)</Text>
+        <TextInput value={date instanceof Date ? date.toISOString() : String(date)} onChangeText={t => setDate(new Date(t))} style={[styles.input, { color: textColor, borderColor: inputBorder }]} placeholderTextColor={placeholderColor} />
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Button title="Pick Image" onPress={pickImage} />
         </View>

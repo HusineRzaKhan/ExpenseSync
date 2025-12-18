@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, Button } from 'react-native';
+import { View, Text, FlatList, Button, Platform } from 'react-native';
 import { ThemeContext } from '../theme';
 
-import { Picker } from '@react-native-picker/picker';
+import CustomPicker from '../components/CustomPicker';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import Config from '../config';
@@ -66,18 +66,9 @@ export default function CalendarScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: bg }}>
       <View style={{ flexDirection: 'row', padding: 12, alignItems: 'center', backgroundColor: cardBg }}>
-        <Picker selectedValue={day} style={{ flex: 1 }} onValueChange={v => setDay(v)}>
-          {Array.from({ length: 31 }, (_, i) => <Picker.Item key={i+1} label={`${i+1}`} value={i+1} />)}
-        </Picker>
-        <Picker selectedValue={month} style={{ flex: 1 }} onValueChange={v => setMonth(v)}>
-          {Array.from({ length: 12 }, (_, i) => <Picker.Item key={i+1} label={`${i+1}`} value={i+1} />)}
-        </Picker>
-        <Picker selectedValue={year} style={{ flex: 1 }} onValueChange={v => setYear(v)}>
-          {Array.from({ length: 5 }, (_, i) => {
-            const y = today.getFullYear() - i;
-            return <Picker.Item key={y} label={`${y}`} value={y} />;
-          })}
-        </Picker>
+        <CustomPicker value={day} onValueChange={setDay} style={{ flex: 1, marginRight: 8 }} items={Array.from({ length: 31 }, (_, i) => ({ label: `${i+1}`, value: i+1 }))} />
+        <CustomPicker value={month} onValueChange={setMonth} style={{ flex: 1, marginRight: 8 }} items={Array.from({ length: 12 }, (_, i) => ({ label: `${i+1}`, value: i+1 }))} />
+        <CustomPicker value={year} onValueChange={setYear} style={{ flex: 1 }} items={Array.from({ length: 5 }, (_, i) => ({ label: `${today.getFullYear() - i}`, value: today.getFullYear() - i }))} />
       </View>
       <View style={{ padding: 12 }}>
         <Button title={showCalendar ? 'Hide calendar' : 'Show calendar'} onPress={() => setShowCalendar(s => !s)} />

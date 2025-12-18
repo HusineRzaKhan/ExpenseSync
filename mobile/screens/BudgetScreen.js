@@ -23,14 +23,18 @@ export default function BudgetScreen() {
     datasets: [ { data: Array.from({ length: days }, () => Math.floor(Math.random()*1000)) } ]
   };
 
+  const bg = theme === 'dark' ? '#111' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#000';
+  const inputBorder = theme === 'dark' ? '#444' : '#ddd';
+  const placeholderColor = theme === 'dark' ? '#999' : '#666';
   return (
-    <View style={{ flex: 1, padding: 12, backgroundColor: theme === 'dark' ? '#111' : '#fff' }}>
-      <Text style={{ fontSize: 18, color: theme === 'dark' ? '#fff' : '#000' }}>Budget Tracking (last {days} days)</Text>
+    <View style={{ flex: 1, padding: 12, backgroundColor: bg }}>
+      <Text style={{ fontSize: 18, color: textColor }}>Budget Tracking (last {days} days)</Text>
       <View style={{ flexDirection: 'row', gap: 8, marginVertical: 8 }}>
-        <TextInput value={fromDate} onChangeText={setFromDate} style={{ borderWidth: 1, borderColor: '#ddd', padding: 8, flex: 1 }} />
-        <TextInput value={toDate} onChangeText={setToDate} style={{ borderWidth: 1, borderColor: '#ddd', padding: 8, flex: 1 }} />
+        <TextInput value={fromDate} onChangeText={setFromDate} style={{ borderWidth: 1, borderColor: inputBorder, padding: 8, flex: 1, color: textColor }} placeholderTextColor={placeholderColor} />
+        <TextInput value={toDate} onChangeText={setToDate} style={{ borderWidth: 1, borderColor: inputBorder, padding: 8, flex: 1, color: textColor }} placeholderTextColor={placeholderColor} />
       </View>
-      <LineChart data={data} width={350} height={220} chartConfig={{ backgroundGradientFrom: theme === 'dark' ? '#111' : '#fff', backgroundGradientTo: theme === 'dark' ? '#111' : '#fff', color:()=>'#4caf50' }} />
+      <LineChart data={data} width={350} height={220} chartConfig={{ backgroundGradientFrom: bg, backgroundGradientTo: bg, color:()=>'#4caf50' }} />
       <View style={{ marginTop: 12 }}>
         <Button title="Set 7 days" onPress={() => setDays(7)} />
         <View style={{ height: 8 }} />

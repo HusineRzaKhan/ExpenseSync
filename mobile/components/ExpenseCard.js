@@ -5,9 +5,11 @@ import { ThemeContext } from '../theme';
 
 export default function ExpenseCard({ item, onPress, onEdit, onDelete }) {
   const { theme } = useContext(ThemeContext);
+  const cardBg = theme === 'dark' ? '#141414' : '#fff';
+  const placeholderBg = theme === 'dark' ? '#222' : '#f0f0f0';
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      {item.image ? <Image source={{ uri: item.image }} style={styles.image} /> : <View style={[styles.image, { backgroundColor: '#f0f0f0' }]} />}
+    <TouchableOpacity style={[styles.card, { backgroundColor: cardBg }]} onPress={onPress}>
+      {item.image ? <Image source={{ uri: item.image }} style={styles.image} /> : <View style={[styles.image, { backgroundColor: placeholderBg }]} />}
       <View style={styles.body}>
         <Text style={{ fontWeight: '700', color: theme === 'dark' ? '#fff' : '#000' }}>{item.name || item.category}</Text>
         <Text style={{ color: theme === 'dark' ? '#ddd' : '#666' }}>{item.notes}</Text>
@@ -15,8 +17,8 @@ export default function ExpenseCard({ item, onPress, onEdit, onDelete }) {
       <View style={styles.right}>
         <Text style={{ fontWeight: '700', color: theme === 'dark' ? '#fff' : '#000' }}>PKR {item.amount}</Text>
         <View style={{ height: 8 }} />
-        <TouchableOpacity onPress={() => onEdit && onEdit(item)}><Text style={{ color: '#007bff' }}>Edit</Text></TouchableOpacity>
-        <TouchableOpacity onPress={() => onDelete && onDelete(item)}><Text style={{ color: '#c0392b' }}>Delete</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => onEdit && onEdit(item)}><Text style={{ color: theme === 'dark' ? '#7fb3ff' : '#007bff' }}>Edit</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => onDelete && onDelete(item)}><Text style={{ color: theme === 'dark' ? '#ff7f7f' : '#c0392b' }}>Delete</Text></TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
