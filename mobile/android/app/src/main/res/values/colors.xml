@@ -2,4 +2,6 @@
   <color name="splashscreen_background">#FFFFFF</color>
   <color name="colorPrimary">#023c69</color>
   <color name="colorPrimaryDark">#ffffff</color>
+  <color name="dropdown_background">#FFFFFF</color>
+  <color name="dropdown_text">#000000</color>
 </resources>

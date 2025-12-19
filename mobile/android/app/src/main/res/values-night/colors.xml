@@ -1,1 +1,4 @@
-<resources/>
+<resources>
+  <color name="dropdown_background">#111111</color>
+  <color name="dropdown_text">#FFFFFF</color>
+</resources>

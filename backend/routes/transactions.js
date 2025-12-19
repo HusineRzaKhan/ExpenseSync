@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const Transaction = require('../models/Transaction');
+const Notification = require('../models/Notification');
 const jwt = require('jsonwebtoken');
 const PDFDocument = require('pdfkit');
 const axios = require('axios');
@@ -12,6 +13,9 @@ router.post('/', auth, async (req, res) => {
     const data = { ...req.body, user: req.user.id };
     const tx = new Transaction(data);
     await tx.save();
+    try {
+      await new Notification({ user: req.user.id, title: 'Expense recorded', body: `${tx.notes || tx.category || 'Expense'}: PKR ${tx.amount}` }).save();
+    } catch (e) { console.warn('Notification save failed', e.message); }
     res.json(tx);
   } catch (err) {
     console.error(err);
@@ -24,6 +28,9 @@ router.put('/:id', auth, async (req, res) => {
   try {
     const tx = await Transaction.findOneAndUpdate({ _id: req.params.id, user: req.user.id }, { $set: req.body }, { new: true });
     if (!tx) return res.status(404).json({ message: 'Not found' });
+    try {
+      await new Notification({ user: req.user.id, title: 'Expense updated', body: `${tx.notes || tx.category || 'Expense'} updated: PKR ${tx.amount}` }).save();
+    } catch (e) { console.warn('Notification save failed', e.message); }
     res.json(tx);
   } catch (err) {
     console.error(err);
@@ -36,6 +43,9 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const tx = await Transaction.findOneAndDelete({ _id: req.params.id, user: req.user.id });
     if (!tx) return res.status(404).json({ message: 'Not found' });
+    try {
+      await new Notification({ user: req.user.id, title: 'Expense deleted', body: `${tx.notes || tx.category || 'Expense'} deleted: PKR ${tx.amount}` }).save();
+    } catch (e) { console.warn('Notification save failed', e.message); }
     res.json({ message: 'Deleted' });
   } catch (err) {
     console.error(err);

@@ -4,6 +4,15 @@
     <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="android:statusBarColor">#ffffff</item>
+    <item name="android:spinnerStyle">@style/SpinnerStyle</item>
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemStyle</item>
+  </style>
+  <style name="SpinnerStyle" parent="Widget.AppCompat.Spinner">
+    <item name="android:background">@android:color/transparent</item>
+  </style>
+  <style name="SpinnerDropDownItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">
+    <item name="android:background">@color/dropdown_background</item>
+    <item name="android:textColor">@color/dropdown_text</item>
   </style>
   <style name="Theme.App.SplashScreen" parent="AppTheme">
     <item name="android:windowBackground">@drawable/ic_launcher_background</item>
