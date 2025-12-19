@@ -40,7 +40,11 @@ export default function ProfileScreen({ onClose }) {
     try {
       // validations
       if (!name) return Alert.alert('Name required');
-      if (/\d/.test(name)) return Alert.alert('Name cannot contain numbers');
+      if (!name.trim()) return Alert.alert('Name cannot be empty');
+      // Check for invalid characters: only letters, spaces, and dashes allowed
+      if (!/^[a-zA-Z\s\-]+$/.test(name.trim())) {
+        return Alert.alert('Invalid name', 'Name can only contain letters, spaces, and dashes (-)');
+      }
       const emailRe = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\\.,;:\s@\"]+\.)+[^<>()[\]\\.,;:\s@\"]{2,})$/i;
       if (!emailRe.test(String(email).toLowerCase())) return Alert.alert('Invalid email');
       if (password) {
@@ -83,7 +87,17 @@ export default function ProfileScreen({ onClose }) {
         </TouchableOpacity>
       </View>
       <Text style={{ color: labelColor, marginBottom: 4 }}>Full name</Text>
-      <TextInput value={name} onChangeText={setName} style={[styles.input, { color: textColor, borderColor: inputBorder }]} placeholderTextColor={placeholderColor} />
+      <TextInput 
+        value={name} 
+        onChangeText={(text) => {
+          // Only allow letters, spaces, and dashes
+          const filtered = text.replace(/[^a-zA-Z\s\-]/g, '');
+          setName(filtered);
+        }} 
+        style={[styles.input, { color: textColor, borderColor: inputBorder }]} 
+        placeholderTextColor={placeholderColor}
+        placeholder="Enter your full name"
+      />
       <Text style={{ color: labelColor, marginBottom: 4 }}>Email</Text>
       <TextInput value={email} onChangeText={setEmail} style={[styles.input, { color: textColor, borderColor: inputBorder }]} keyboardType="email-address" placeholderTextColor={placeholderColor} />
       <Text style={{ color: labelColor, marginBottom: 4 }}>Change password</Text>

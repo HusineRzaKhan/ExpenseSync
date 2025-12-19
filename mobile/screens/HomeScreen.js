@@ -93,7 +93,16 @@ export default function HomeScreen({ navigation }) {
         <FlatList data={records} keyExtractor={i => i._id} renderItem={({ item }) => <ExpenseCard item={item} onPress={() => setDetail(item)} onEdit={onEdit} onDelete={onDelete} />} contentContainerStyle={{ padding: 12 }} />
       )}
 
-      <RecordModal visible={modalVisible} onClose={() => setModalVisible(false)} onCreate={onCreate} />
+      <RecordModal 
+        visible={modalVisible} 
+        onClose={() => {
+          setModalVisible(false);
+          setEditing(null);
+        }} 
+        onCreate={onCreate}
+        initial={editing}
+        onUpdate={onUpdate}
+      />
       <ExpenseDetailModal item={detail} onClose={() => setDetail(null)} />
     </View>
   );

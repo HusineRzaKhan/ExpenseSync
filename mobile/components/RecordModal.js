@@ -25,8 +25,18 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
       setCategory(initial.category ? initial.category.charAt(0).toUpperCase() + initial.category.slice(1) : 'Other');
       setDate(initial.date ? new Date(initial.date) : new Date());
       setImage(initial.image || null);
+    } else {
+      // Reset form when creating new record
+      setName('');
+      setDesc('');
+      setAmount('');
+      setCurrency('PKR');
+      setMethod('cash');
+      setCategory('Other');
+      setDate(new Date());
+      setImage(null);
     }
-  }, [initial]);
+  }, [initial, visible]);
 
   const pickImage = async () => {
     const res = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -46,27 +56,37 @@ export default function RecordModal({ visible, onClose, onCreate, initial, onUpd
     if (!amount) return alert('Enter amount');
     const cleaned = String(amount).trim();
     if (!/^[0-9]+(\.[0-9]{1,2})?$/.test(cleaned)) return alert('Amount must be a number');
+    
     const token = await AsyncStorage.getItem('token');
     const body = { name, notes: desc, amount: Number(amount), category: category.toLowerCase(), date };
+    
     try {
+      // Check if we're editing an existing record
       if (initial && onUpdate) {
-        // update flow
-        const token = await AsyncStorage.getItem('token');
+        // Update flow - only update, don't create
         if (token) {
           const res = await axios.put(`${Config.API_URL}/transactions/${initial._id}`, body, { headers: { Authorization: `Bearer ${token}` } });
           onUpdate(res.data);
+          onClose(); // Close modal after successful update
           return;
         }
+        // Fallback: update locally if no token
         onUpdate({ ...initial, ...body, _id: initial._id });
+        onClose();
         return;
       }
+      
+      // Create flow - only create if not editing
       if (token) {
         const res = await axios.post(`${Config.API_URL}/transactions`, body, { headers: { Authorization: `Bearer ${token}` } });
         onCreate(res.data);
+        onClose(); // Close modal after successful create
         return;
       }
+      // Fallback: create locally if no token
       const rec = { _id: Date.now().toString(), name, notes: desc, amount: Number(amount), category: category.toLowerCase(), date: date };
       onCreate(rec);
+      onClose();
       return;
     } catch (err) {
       console.warn('Record submit failed', err.message);
