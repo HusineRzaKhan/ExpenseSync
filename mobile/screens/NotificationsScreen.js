@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { ThemeContext } from '../theme';
+import { NotificationContext } from '../contexts/NotificationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Config from '../config';
@@ -8,6 +10,7 @@ import Config from '../config';
 export default function NotificationsScreen() {
   const [list, setList] = useState([]);
   const { theme } = useContext(ThemeContext);
+  const { refreshNotifications } = useContext(NotificationContext);
 
   const loadNotifications = async () => {
     try {
@@ -18,6 +21,8 @@ export default function NotificationsScreen() {
       }
       const res = await axios.get(`${Config.API_URL}/notifications`, { headers: { Authorization: `Bearer ${token}` } });
       setList(res.data || []);
+      // Update unread count in context
+      refreshNotifications();
     } catch (err) {
       console.warn('Failed to load notifications', err.message);
       setList([]);
@@ -27,6 +32,14 @@ export default function NotificationsScreen() {
   useEffect(() => {
     loadNotifications();
   }, []);
+
+  // Refresh notifications when screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      loadNotifications();
+      refreshNotifications();
+    }, [])
+  );
 
   const onPress = async (item) => {
     // Don't mark as read if already read
@@ -50,6 +63,7 @@ export default function NotificationsScreen() {
       // Refresh list to ensure sync with server
       if (res.data) {
         await loadNotifications();
+        refreshNotifications(); // Update unread count
       }
     } catch (e) { 
       console.warn('Mark read failed', e.message);

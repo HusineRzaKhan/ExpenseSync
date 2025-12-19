@@ -7,6 +7,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExpenseDetailModal from '../components/ExpenseDetailModal';
 import { ThemeContext } from '../theme';
+import { NotificationContext } from '../contexts/NotificationContext';
 
 export default function HomeScreen({ navigation }) {
   const [records, setRecords] = useState([]);
@@ -14,6 +15,7 @@ export default function HomeScreen({ navigation }) {
   const [editing, setEditing] = useState(null);
   const [detail, setDetail] = useState(null);
   const { theme } = useContext(ThemeContext);
+  const { refreshNotifications } = useContext(NotificationContext);
 
   useEffect(() => {
     // load recent records (placeholder)
@@ -37,6 +39,8 @@ export default function HomeScreen({ navigation }) {
   const onCreate = (rec) => {
     setRecords(r => [rec, ...r]);
     setModalVisible(false);
+    // Refresh notifications after creating a record
+    setTimeout(() => refreshNotifications(), 1000);
   };
 
   const onUpdate = (rec) => {
@@ -60,10 +64,14 @@ export default function HomeScreen({ navigation }) {
           if (token) {
             await axios.delete(`${Config.API_URL}/transactions/${item._id}`, { headers: { Authorization: `Bearer ${token}` } });
             setRecords(r => r.filter(x => x._id !== item._id));
+            // Refresh notifications after deleting a record
+            setTimeout(() => refreshNotifications(), 1000);
             return;
           }
         } catch (err) { console.warn(err.message); }
         setRecords(r => r.filter(x => x._id !== item._id));
+        // Refresh notifications even if API call fails
+        setTimeout(() => refreshNotifications(), 1000);
       }}
     ]);
   };

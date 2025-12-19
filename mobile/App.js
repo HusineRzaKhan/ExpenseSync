@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 import { ThemeProvider, ThemeContext } from './theme';
+import { NotificationProvider, NotificationContext } from './contexts/NotificationContext';
 import SideMenu from './components/SideMenu';
 import AppBar from './components/AppBar';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -24,6 +25,8 @@ const Tab = createBottomTabNavigator();
 function MainTabs({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const { toggleTheme, theme } = React.useContext(ThemeContext);
+  const { unreadCount } = React.useContext(NotificationContext);
+  
   return (
     <>
       <Tab.Navigator
@@ -36,7 +39,30 @@ function MainTabs({ navigation }) {
             if (route.name === 'Categories') name = 'category';
             if (route.name === 'Budget') name = 'bar-chart';
             if (route.name === 'Notifications') name = 'notifications';
-            return <MaterialIcons name={name} size={size} color={color} />;
+            
+            const icon = <MaterialIcons name={name} size={size} color={color} />;
+            
+            // Add badge dot for notifications if there are unread
+            if (route.name === 'Notifications' && unreadCount > 0) {
+              return (
+                <View style={{ position: 'relative' }}>
+                  {icon}
+                  <View style={{
+                    position: 'absolute',
+                    right: -6,
+                    top: -2,
+                    backgroundColor: '#ff4444',
+                    borderRadius: 5,
+                    width: 10,
+                    height: 10,
+                    borderWidth: 1.5,
+                    borderColor: theme === 'dark' ? '#222' : '#fff'
+                  }} />
+                </View>
+              );
+            }
+            
+            return icon;
           },
           tabBarStyle: { backgroundColor: theme === 'dark' ? '#222' : '#fff' },
         })}
@@ -82,7 +108,9 @@ function InnerApp() {
 export default function App() {
   return (
     <ThemeProvider>
-      <InnerApp />
+      <NotificationProvider>
+        <InnerApp />
+      </NotificationProvider>
     </ThemeProvider>
   );
 }
